@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|人事业务中心</title>
+ #parse("/common/header-meta-link.vm")
+ <style type="text/css">
+ 	.row label{width:70px;}
+ </style>
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+<!--<OBJECT
+		  classid="clsid:609DBF80-EDA8-4242-9493-F1F22BC7EE6B" 
+		  width=0
+		  height=0
+		  align=center
+		  hspace=0
+		  vspace=0
+		  id = SmartID_cpu>
+  </OBJECT>-->
+ <div id="readobject" style="display: none" >
+ <OBJECT
+	  classid="clsid:CEA82072-043E-4023-BF5E-4AAE4AF1454B" 
+	  width=100
+	  height=100
+	  align=center
+	  hspace=0
+	  vspace=0
+	  id = SmartID_zr	  
+>
+  </OBJECT>
+ </div>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="rsywright.html">人事业务中心</a>
+    /<span>标识管理</span>
+  </p>
+  <div class="row"><div class="col-sm-12 border1 text-right">
+	  <button type="button" class="btn btn-link" id="sReadCard">读卡</button>
+      <button type="button" class="btn btn-link" id="select">查询</button>
+	  <button type="button" class="btn btn-link" id="insert">发卡</button>
+	  <button type="button" class="btn btn-link" id="lossOf">挂失</button>
+	  <button type="button" class="btn btn-link" id="seekOut">解挂</button>
+	  <!--<button type="button" class="btn btn-link" id="buCard">补卡</button>-->
+	  <button type="button" class="btn btn-link" id="sendBack">退卡</button>
+      <!--<button type="button" class="btn btn-link">导出</button>-->
+    </div></div>
+  <div class="row" style="margin-top:20px;">
+	<div class="col-sm-3">
+      <label>公司部门：</label>
+      <input type="text" class="form-control" id="sDepartmentInnerId" name="DepartmentInnerId" style="width:170px;height:28px" >
+    </div>
+	<div class="col-sm-3">
+      <label>人员编号：</label>
+      <input type="text" class="form-control" id="sUserId" name="UserId" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3">
+      <label>人员姓名：</label>
+      <input type="text" class="form-control" id="sUserName" name="UserName" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+	<div class="col-sm-3">
+      <label>标识状态：</label>
+      <select multiple="multiple" id="sMarkState" name="MarkState"style="height:28px; width:170px; ">
+			<option value="0">正常</option>
+			<option value="1">已挂失</option>
+			<option value="2">已退卡</option>
+		</select>
+    </div>
+    <div class="col-sm-3">
+      <label>标识号：</label>
+      <input type="text" class="form-control" id="sMarkId" name="MarkId" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3">
+      <label>标识名称：</label>
+      <input type="text" class="form-control" id="sMarkName" name="MarkName" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3" id="sRemarkDiv">
+      <label id="sRemarkLabel">备注：</label>
+      <input type="text" class="form-control" id="sRemark" name="Remark" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3" id="sStandbyADiv">
+      <label id="sStandbyALabel">备用1：</label>
+      <input type="text" class="form-control" id="sStandbyA" name="StandbyA" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+	<div class="col-sm-3" id="sStandbyBDiv">
+      <label id="sStandbyBLabel">备用2：</label>
+      <input type="text" class="form-control" id="sStandbyB" name="StandbyB" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+  </div>
+  <hr class="w98">
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table"   style="height:450px">
+	</table>
+  </div>
+</div>
+
+<!--添加弹出框-->
+<div class="modal fade" id="insertDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">添加标识</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="insertForm">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*姓名：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iUserName" name="UserName" readonly="readonly">
+							<input type="hidden" class="form-control inp" id="iUserInnerId" name="UserInnerId" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iUserId" name="UserId" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*标识类型：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMarkTypeInnerId" name="MarkTypeInnerId" style="width:250px;height:30px">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*标识名称：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMarkName" name="MarkName" value="第一张卡">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*标识号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMarkId" name="MarkId" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">外部编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMarkCode" name="MarkCode">
+						</div>
+					</div>
+					<!--<div class="form-group">
+						<label class="col-sm-3 control-label">卡费：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMarkMoney" name="MarkMoney">
+						</div>
+					</div>-->
+    				<div class="form-group" id="iStandbyADiv">
+						<label class="col-sm-3 control-label" id="iStandbyALabel">备用1：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iStandbyA" name="StandbyA">
+						</div>
+					</div>
+					<div class="form-group" id="iStandbyBDiv">
+						<label class="col-sm-3 control-label" id="iStandbyBLabel">备用2：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iStandbyB" name="StandbyB">
+						</div>
+				    </div>
+					<!--<div class="form-group" id="itStandbyCDiv">
+						<label class="col-sm-3 control-label" id="itStandbyCLabel">备用3：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="itStandbyC" name="StandbyC">
+						</div>
+				    </div>
+					<div class="form-group" id="itStandbyDDiv">
+						<label class="col-sm-3 control-label" id="itStandbyDLabel">备用4：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="itStandbyD" name="StandbyD">
+						</div>
+				    </div>-->
+					<div class="form-group" id="iRemarkDiv">
+						<label class="col-sm-3 control-label" id="iRemarkLabel">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iRemark" name="Remark">
+						</div>
+				    </div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="button" class="btn btn-primary" id="readCard">读卡</button>
+							<button type="submit" class="btn btn-primary" id="insertSubmit">添加</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+	
+<!--修改弹出框-->
+<div class="modal fade" id="updateDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">修改标识</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="updateForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*标识名称：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMarkName" name="MarkName" >
+							<input type="hidden" class="form-control inp" id="uMarkInnerId" name="MarkInnerId">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*标识号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMarkId" name="MarkId">
+						</div>
+					</div>
+    				<div class="form-group" id="uStandbyADiv">
+						<label class="col-sm-3 control-label" id="uStandbyALabel">备用1：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uStandbyA" name="StandbyA">
+						</div>
+					</div>
+					<div class="form-group" id="uStandbyBDiv">
+						<label class="col-sm-3 control-label" id="uStandbyBLabel">备用2：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uStandbyB" name="StandbyB">
+						</div>
+				    </div>
+					<div class="form-group" id="uRemarkDiv">
+						<label class="col-sm-3 control-label" id="uRemarkLabel">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uRemark" name="Remark">
+						</div>
+				    </div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="updateSubmit">修改</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+<!--添加弹出框-->
+<div class="modal fade" id="buCardDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">补卡</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="buCardForm">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">姓名：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="buUserName" name="UserName" readonly="readonly">
+							<input type="hidden" class="form-control inp" id="buUserInnerId" name="UserInnerId" readonly="readonly">
+							<input type="hidden" class="form-control inp" id="buMarkInnerId" name="UserInnerId" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="buUserId" name="UserId" readonly="readonly">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">原标识号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="yMarkId" name="yMarkId" readonly="readonly">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*新标识号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="xMarkId" name="xMarkId" readonly="readonly">
+						</div>
+					</div>
+    				<!--<div class="form-group">
+						<label class="col-sm-3 control-label">补卡卡费：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="huankaMoney" name="huankaMoney">
+						</div>
+					</div>-->
+
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="button" class="btn btn-primary" id="bureadCard">读卡</button>
+							<button type="submit" class="btn btn-primary" id="buCardSubmit">保存</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<script src="js/rsywzx/mark.js"></script>
+</body>
+</html>

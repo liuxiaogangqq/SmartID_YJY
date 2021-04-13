@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|停车管理系统</title>
+ #parse("/common/header-meta-link.vm")
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="tccright.html">停车管理系统</a>
+    /<span>通行规则管理</span>
+  </p>
+  <div class="row"><div class="col-sm-12 border1 text-right">
+      <button type="button" class="btn btn-link" id="select">查询</button>
+	  <button type="button" class="btn btn-link" id="insert">添加</button>
+	  <button type="button" class="btn btn-link" id="update">修改</button>
+	  <button type="button" class="btn btn-link" id="delete">删除</button>
+    </div></div>
+  <div class="row" style="margin-top:20px;">
+    <div class="col-sm-3">
+      <label>通行规则编号：</label>
+      <input type="text" class="form-control" id="sCarTypeId" name="CarTypeId" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3">
+      <label>通行规则名称：</label>
+      <input type="text" class="form-control" id="sCarTypeName" name="CarTypeName" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3">
+      <label>备注：</label>
+      <input type="text" class="form-control" id="sRemark" name="Remark" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+  </div>
+  <hr class="w98">
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table" class="easyui-datagrid"  style="height:600px">
+	</table>
+  </div>
+</div>
+
+<!--添加弹出框-->
+<div class="modal fade" id="insertDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">添加通行规则</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="insertForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*通行规则名称：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iPassRulesName" name="PassRulesName">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*通行时间编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iPassRulesId" name="PassRulesId" >
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*开始时间：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iStartTime" name="StartTime" >
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*结束时间：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iEndTime" name="EndTime" >
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*免费时间：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iFreeTime" name="FreeTime" >（分钟）
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*收费金额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMoney" name="Money" >（每15分钟）
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*车辆类型：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iCarTypeInnerId" name="CarTypeInnerId"  style="width:250px;height:30px">
+						</div>
+					</div>
+					<div class="form-group" id="iRemarkDiv">
+						<label class="col-sm-3 control-label" id="iRemarkLabel">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iRemark" name="Remark">
+						</div>
+				    </div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="insertSubmit">保存</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+	
+<!--修改弹出框-->
+<div class="modal fade" id="updateDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">修改通行规则</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="updateForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*通行规则名称：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uPassRulesName" name="PassRulesName" >
+							<input type="hidden" class="form-control inp" id="uPassRulesInnerId" name="PassRulesInnerId">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*通行规则编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uPassRulesId" name="PassRulesId"  >
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*开始时间：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uStartTime" name="StartTime"  >
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*结束时间：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uEndTime" name="EndTime"  >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*免费时间：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uFreeTime" name="FreeTime" >（分钟）
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*收费金额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMoney" name="Money" >（每15分钟）
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*车辆类型：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uCarTypeInnerId" name="CarTypeInnerId"  style="width:250px;height:30px">
+						</div>
+					</div>
+					<div class="form-group" id="uRemarkDiv">
+						<label class="col-sm-3 control-label">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uRemark" name="Remark">
+						</div>
+				    </div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="updateSubmit">保存</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<script src="js/tcxt/passRules.js"></script>
+</body>
+</html>

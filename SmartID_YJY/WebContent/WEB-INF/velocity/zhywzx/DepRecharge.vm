@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|账户业务中心</title>
+ #parse("/common/header-meta-link.vm")
+  <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+        <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+        /
+        <a href="zhywright.html">账户业务中心</a>
+        /<span>账户充/减值</span>
+      </p>
+      <div class="row"><div class="col-sm-12 border1 text-right">
+          <button type="button" class="btn btn-link" id="Select">查询</button>
+    	  <button type="button" class="btn btn-link" id="Recharge">充值</button>
+		  <button type="button" class="btn btn-link" id="Decrease">减值</button>
+        </div></div>
+     <div class="row" style="margin-top:20px;">
+      <div class="col-sm-3">
+          <label>部门名称：</label>
+          <input type="text" class="form-control" id="sDepartmentInnerId" name="DepartmentInnerId" style="width:170px;height:28px">
+        </div>
+      </div>
+      <hr class="w98">
+      <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+    	<table id="table" class="easyui-datagrid"  style="height:450px">
+    	</table>
+      </div>
+    </div>
+</div>
+
+<!--充值弹出框-->
+<div class="modal fade" id="rechargeDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">充值</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="rechargeForm">
+    				<div class="form-group">
+						<div class="col-sm-9">
+							<input type="hidden" class="form-control inp" id="rUserInnerId" name="UserInnerId"\>
+							<input type="hidden" class="form-control inp" id="rAccountInnerId" name="AccountInnerId"\>
+							<input type="hidden" class="form-control inp" id="rAccountInnerId1" name="AccountInnerId1"\>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">公司：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="rCompanyName" name="CompanyName" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">部门：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="rDepartmentName" name="DepartmentName" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">现金余额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="rBeforeMoney" name="BeforeMoney" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">补贴余额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="rSubsidy" name="Subsidy" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">充值金额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="rMoney" name="Money">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">到账系数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="rProportion" name="Proportion" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">实际到账：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="rFavorableMoney" name="FavorableMoney" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">资金来源：</label>
+						<div class="col-sm-9">
+							<select class="form-control" id="rMoneySource" name="MoneySource">
+                    			<option value="0">现金</option>
+                    			<option value="1">微信</option>
+                    			<option value="2">支付宝</option>
+                    			<option value="3">银行卡</option>
+                    			<option value="4">支票</option>
+                    			<option value="5">空充</option>
+                			</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="rRemark" name="Remark"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="button" class="btn btn-primary" id="rechargeSubmit">充值</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<!--减值弹出框-->
+<div class="modal fade" id="decreaseDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">减值</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="decreaseForm">
+    				<div class="form-group">
+						<div class="col-sm-9">
+							<input type="hidden" class="form-control inp" id="dUserInnerId" name="UserInnerId"\>
+							<input type="hidden" class="form-control inp" id="dAccountInnerId" name="AccountInnerId"\>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">公司：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="dCompanyName" name="CompanyName" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">部门：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="dDepartmentName" name="DepartmentName" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">现金余额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="dBeforeMoney" name="BeforeMoney" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">补贴余额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="dSubsidy" name="Subsidy" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">减值金额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="dMoney" name="Money">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="dRemark" name="Remark"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="button" class="btn btn-primary" id="decreaseSubmit">减值</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<script src="js/zhywzx/DepRecharge.js"></script>
+</body>
+</html>

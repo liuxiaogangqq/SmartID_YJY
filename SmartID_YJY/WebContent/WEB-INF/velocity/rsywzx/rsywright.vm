@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>停车管理系统|人事业务中心</title>
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/content.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+        <script src="bootstrap/js/html5shiv.js"></script>
+		<script src="bootstrap/js/respond.min.js"></script>
+        <![endif]-->
+	    <script src="jquery/jquery.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			function goIndex(){
+				top.location.href="index.html";
+			}
+		</script>
+	</head>
+	
+	<body>
+		<div class="container-fluid">
+			<p class="nav-bread"><a onClick="goIndex()" style="cursor:pointer;">首页</a> /
+				<span>人事业务中心</span></p>
+			<div style="background-image:url(images/new/rsywzx/rsywzx.png);width:1100px; height:500px; ">
+				<div style="padding-top:200px;padding-left:150px">
+					<span style="font-size:20px">
+						人事业务中心：<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:balck">人事业务中心是智能一卡通管理平台的躯干，所有的业务都是建立在人事的基础上完成的，是系统运行的主要组成部分。主要功能包括：公司管理、部门管理、人员管理<br/></span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

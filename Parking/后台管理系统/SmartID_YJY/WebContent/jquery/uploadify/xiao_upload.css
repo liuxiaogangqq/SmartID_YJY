@@ -1,0 +1,81 @@
+.postPic{
+                   border: 1px solid #ccc;
+                   height: auto;
+                   margin: 1%;
+                   border-radius: 4px;
+                   padding: 0;
+            }
+            .postPic .pic_header{
+                    height: 30px;
+                    line-height: 30px;
+                    color: #666;
+                    font-size: 13px;
+                    background: rgba(204, 204, 204, 0.21);
+                    text-indent: 10px;
+                    margin-bottom: 20px;
+                    box-shadow: 0px 2px 5px 1px rgba(102, 102, 102, 0.42);
+            }
+           .postPic .pic_header .pic_info {
+                float: left;
+            }
+            .pic_total{
+                    height: 30px;
+                    line-height: 30px;
+                    color: #666;
+                    font-size: 13px;
+                    background: #fafafa;
+                    text-indent: 10px;
+            }
+            .pic_content {
+                width: 140px;
+                height: 140px;
+                float: left;
+                border: 2px solid #eee;
+                margin: 6px 11px;
+                overflow: hidden;
+                position: relative;
+                border-radius: 8px;
+                }
+            .pic_content img{
+                width: 145px;
+                height: 170px;
+            }
+            #file {
+                clear: both;
+                margin: 0 auto;
+                position: relative;
+                top: 5px;
+            }
+            #clear {
+                clear: both;
+                margin: 0 auto;
+                position: relative;
+                top: 5px;
+            }
+            .text {
+                    display: none;
+                    width: 140px;
+                    height: 25px;
+                    line-height: 25px;
+                    text-align: center;
+                    position: absolute;
+                    top: 115px;
+                    left: 0;
+                    z-index: 3;
+                    cursor: pointer;
+                    color: #fff;
+                    font-size: 13px;
+                }
+            .remove {
+                    display: none;
+                    width: 140px;
+                    height: 25px;
+                    background: #000;
+                    position: absolute;
+                    top: 115px;
+                    left: 0;
+                    z-index: 2;
+                    opacity: 0.7;
+                    filter: alpha(opacity=70);
+                    cursor: pointer;
+                }

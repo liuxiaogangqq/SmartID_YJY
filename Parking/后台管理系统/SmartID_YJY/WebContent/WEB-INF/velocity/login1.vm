@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>智能一卡通平台|登录</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/login.css" rel="stylesheet">
+	<link href="images/id1.ico" rel="shortcut icon"/>
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<script src="js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript">
+        	window.onload=function(){
+        	document.getElementById('form').action='login.html?time='+new Date().getTime();
+    	}
+		</script>
+	</head>
+	<body id="body">
+		<div class="container-fluid">
+			<div class="login-wrap">
+				<div class="content-l">
+				</div>
+				<div class="logo"></div>
+				<div class="content-r">
+					<form class="form-horizontal" role="form" action="" id="form" method="post">
+						<p class="title"></p>
+						<div>
+							<input type="text" class="txt-input" id="OperatorId"  name="OperatorId" placeholder="用户名">
+						</div>
+						<div>
+							<input type="password" class="txt-input pwd" id="Password" name="Password" placeholder="密码">
+						</div>
+						<div class="error-info">
+							<div class="col-sm-offset-3 col-sm-9">
+							<p class="text-error" style="color:#FF0000">$!actionResult</p>
+        				</div>
+						</div>
+						<div>
+							<button type="submit" class="btn-singin" >
+								登&nbsp;&nbsp;录
+							</button>
+						</div>
+					</form>
+				</div>
+				<div class="clear-both"></div>
+			</div>
+			<!--<div class="footer">
+				<p>Copyright &copy;&nbsp;2017-2019&nbsp;<img src="images/tm-fff.png"></p>
+			</div>-->
+		</div>
+	</body>
+	</html>

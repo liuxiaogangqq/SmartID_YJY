@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|账户业务中心</title>
+ #parse("/common/header-meta-link.vm")
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="xfglright.html">消费管理系统</a>
+    /<span>计时消费规则</span>
+  </p>
+  <div class="row top54">
+    <div class="col-sm-3">
+      <label>规则编号：</label>
+      <input type="text" class="form-control" id="sTimeRuleId" name="TimeRuleId"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3">
+      <label>规则名称：</label>
+      <input type="text" class="form-control" id="sTimeRuleName" name="TimeRuleName"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+  </div>
+  <div class="row" style="margin-top:5px;"><div class="col-sm-12 text-right">
+      <button type="button" class="btn btn-primary" id="select">查询</button>
+	  <button type="button" class="btn btn-primary" id="insert">添加</button>
+	  <button type="button" class="btn btn-primary" id="update">修改</button>
+    </div></div>
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table" class="easyui-datagrid"  style="height:450px">
+	</table>
+  </div>
+</div>
+
+<!--添加弹出框-->
+<div class="modal fade" id="insertDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">添加规则</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="insertForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*规则名称：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iTimeRuleName" name="TimeRuleName"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*规则编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iTimeRuleId" name="TimeRuleId"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*商户：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMerchantInnerId" name="MerchantInnerId" style="width:250px;height:30px">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*计时单位（分钟）：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMinutes" name="Minutes">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*单位费用：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMoney" name="Money" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">取整方法：</label>
+						<div class="col-sm-9">
+							<select class="form-control" id="iIntpart" name="Intpart">
+								<option value="1" selected = "selected">四舍五入</option>
+								<option value="2">舍去余数</option>
+								<option value="3">舍余加一</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*超时时间（分钟）：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iTimeout" name="Timeout" value="240">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*最小进入金额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMinMoney" name="MinMoney" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*免费时间（分钟）：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iFreetime" name="Freetime" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="insertSubmit">添加</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+	
+<!--修改弹出框-->
+<div class="modal fade" id="updateDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">修改规则</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="updateForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*规则名称：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uTimeRuleName" name="TimeRuleName"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+							<input type="hidden" class="form-control inp" id="uTimeRuleInnerId" name="TimeRuleInnerId">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*规则编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uTimeRuleId" name="TimeRuleId"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*商户：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMerchantInnerId" name="MerchantInnerId" style="width:250px;height:30px">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*计时单位（分钟）：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMinutes" name="Minutes">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*单位费用：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMoney" name="Money" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">取整方法：</label>
+						<div class="col-sm-9">
+							<select class="form-control" id="uIntpart" name="Intpart">
+								<option value="1">四舍五入</option>
+								<option value="2">舍去余数</option>
+								<option value="3">舍余加一</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*超时时间（分钟）：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uTimeout" name="Timeout">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*最小进入金额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMinMoney" name="MinMoney">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*免费时间（分钟）：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uFreetime" name="Freetime">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="updateSubmit">修改</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<script src="js/xfglxt/timeRule.js"></script>
+</body>
+</html>

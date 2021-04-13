@@ -1,0 +1,37 @@
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="" name="description" />
+<link rel="shortcut icon" href="#springUrl('/images/biad.ico')" />
+<meta content="" name="author" />
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/content.css" rel="stylesheet">
+<link href="css/metro.css" rel="stylesheet">
+<link href="jquery/themes/default/easyui.css" rel="stylesheet">
+<link href="jquery/themes/icon.css" rel="stylesheet">
+<link href="jquery/themes/color.css" rel="stylesheet">
+<!--<script src="jquery/jquery.min.js"></script>-->
+<script src="jquery/jquery-1.8.0.min.js"></script> 
+<script src="jquery/jquery.form.min.js"></script>
+<script src="jquery/jquery.easyui.min.js"></script>
+<script src="jquery/easyui-lang-zh_CN.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="jquery/jquery.validate.js"></script>
+<script src="jquery/easyui_validate_extents.js"></script>
+<script src="jquery/validateNew.js"></script>
+<script src="js/gongyou.js"></script>
+<script src="WdatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
+<style type="text/css">
+button.btn {padding: 4px 10px;}
+button.btn:last-child {margin-right:0px;}
+.col-sm-3,.col-sm-6 { text-align: left; margin-top:5px;}
+.col-sm-3{width: 24%;display: inline-block;float: none;}
+.row{width:99%;margin:auto;}
+.border1{border-bottom:1px solid #6790de;margin-top:54px;}
+.w98{width:98%;border-top-color:#e5e5e5;}
+
+.form-horizontal .col-sm-9{display:inline-block;}
+.form-horizontal .col-sm-8{margin: 0 auto;text-align:center;}
+</style>
+
+

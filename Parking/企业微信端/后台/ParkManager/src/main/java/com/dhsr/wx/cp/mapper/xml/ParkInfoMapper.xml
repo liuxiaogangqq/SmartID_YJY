@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhsr.wx.cp.mapper.ParkInfoMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="orderSql">
+        RecordInnerId,VisitorInfoInnerId,VisitorName,VisitorEmail,VisitorIDCode,VisitorCompany,UserInnerId,VisitorThing,VisitorPhoto,VisitorInPhoto,VisitorNum,VisitorCarCode,CONVERT(varchar(30),
+        VisitorBeginTime, 20) as VisitorBeginTime,CONVERT(varchar(30), VisitorEndTime, 20) as
+        VisitorEndTime,CONVERT(varchar(30), RecordTime, 20) as
+        RecordTime,OrderType,OrderCode,UserName,DepartMentName,VisitorState,ApproveTime,CameraState,Remark,CardId,ACInfo,CarTypeInnerId
+    </sql>
+    <!-- 通用查询结果列无内部id -->
+    <sql id="orderSqlNoId">
+        VisitorInfoInnerId,VisitorName,VisitorEmail,VisitorIDCode,VisitorCompany,UserInnerId,VisitorThing,VisitorPhoto,VisitorInPhoto,VisitorNum,VisitorCarCode,VisitorBeginTime,VisitorEndTime,RecordTime,OrderType,OrderCode,UserName,DepartMentName,VisitorState,ApproveTime,CameraState,Remark,CardId,ACInfo,CarTypeInnerId
+    </sql>
+    <!-- 访客内部id -->
+    <sql id="visitorSql">
+        VisitorInfoInnerId,VisitorName,VisitorEmail,VisitorSex,VisitorIDType,VisitorIDCode,VisitorBirthday,VisitorCar,VisitorPhone,VisitorPwd,VisitorPwdStates,VisitorState,VisitorLock,VisitorCreateDate,VisitorVerifyDate,VisitorCompany,VisitorAddress,VisitorPosition,VisitorNikeName,VisitorLocation,DelFlag,StandByA
+    </sql>
+    <!-- 访客内部Noid -->
+    <sql id="visitorSqlNoId">
+        VisitorName,VisitorEmail,VisitorSex,VisitorIDType,VisitorIDCode,VisitorBirthday,VisitorCar,VisitorPhone,VisitorPwd,VisitorPwdStates,VisitorState,VisitorLock,VisitorCreateDate,VisitorVerifyDate,VisitorCompany,VisitorAddress,VisitorPosition,VisitorNikeName,VisitorLocation,DelFlag,StandByA
+    </sql>
+    <!-- 缴费记录id -->
+    <sql id="chargeRecSql">ChargeRecordInnerId,RecDateTime,CarNumber,CONVERT(varchar(30), InTime, 20) as
+        InTime,CONVERT(varchar(30), OutTime, 20) as
+        OutTime,Money,CarType,ChargeState,StandbyA,StandbyB,VisRecordInnerId,OrderNo,CONVERT(varchar(30), ChargeTime,
+        20) as ChargeTime,ChargeType
+    </sql>
+    <!-- 缴费记录Noid -->
+    <sql id="chargeRecSqlNoId">
+        RecDateTime,CarNumber,InTime,OutTime,Money,CarType,ChargeState,StandbyA,StandbyB,VisRecordInnerId,OrderNo,ChargeTime,ChargeType
+    </sql>
+    <!-- 消费记录Noid -->
+    <sql id="ConLogSqlNoId">
+        MarkInnerId,MarkId,MarkTypeInnerId,UserInnerId,DepartmentInnerId,CompanyInnerId,ConTerminalInnerId,TerminalTypeInnerId,MerchantInnerId,AppInnerId,AreaInnerId,PersonMoney,AllowanceMoney,NumberMoney,PersonBFMoney,PersonAFMoney,AllowanceBFMoney,AllowanceAFMoney,NumberBFMoney,NumberAFMoney,Money1,Money2,Money,DiscountMoney,Proportion,ConDatetime,UploadDatetime,ConTypeInnerId,ConPattern,ConWay,LimitTimes,OffLine,ErrorConLogInnerId,Operator,Remark,StandbyA,StandbyB,StandbyC,StandbyD,Rules
+    </sql>
+
+    <sql id="DepartmentSql">
+        DepartmentInnerId,DepartmentId,DepartmentName,CompanyInnerId,UpInnerId,DepartmentLevel,Remark,DelFlag,StandbyA,StandbyB,StandbyC,StandbyD
+    </sql>
+    <!-- 通用查询结果列 -->
+    <sql id="OperatorSql">
+        UserInnerId,UserId,UserName,UserTypeInnerId,CompanyInnerId,DepartmentInnerId,AreaList,AppList,UState,Sex,Mobile,Email,ImageUrl,StandbyD
+    </sql>
+    <!-- 查询剩余车位数量-->
+    <select id="searchParkNum" parameterType="map" resultType="Integer">
+        select ParkResidue from Park_Date where  ParkDate between CONVERT(varchar(10),(CAST(CONVERT(varchar(10),#{VisitorBeginTime},23) as datetime ) ),23) and #{VisitorEndTime} and ParkType in(${ParkType})
+    </select>
+
+    <!-- 查询当天剩余车位数量-->
+    <select id="searchParkNumByDate" parameterType="map" resultType="Map">
+          select top 1   stuff((select ',' + ParkResidue from Park_Date where ParkDate =
+          pd.ParkDate for xml path('')),1,1,'') as ParkResidue  from Park_Date pd where ParkDate = CONVERT(varchar(100),GETDATE(),23)
+    </select>
+    <!-- 减车位 -->
+    <update id="updateParkNumDel" parameterType="Map">
+        update Park_Date set
+        ${ParkResidue} = ${ParkResidue}-1
+        where  ParkDate between CONVERT(varchar(10),(CAST(CONVERT(varchar(10),#{VisitorBeginTime},23) as datetime ) ),23) and #{VisitorEndTime}  and ParkType  = #{ParkType}
+    </update>
+    <!-- 加车位 -->
+    <update id="updateParkNumAdd" parameterType="Map">
+        update Park_Date set
+        ${ParkResidue} = ${ParkResidue}+1
+        where  ParkDate between CONVERT(varchar(10),(CAST(CONVERT(varchar(10),#{VisitorBeginTime},23) as datetime ) ),23) and #{VisitorEndTime}  and ParkType  = #{ParkType}
+    </update>
+
+
+    <!--查询当天的被访人的访客数量 -->
+    <select id="searchVisitorNum" parameterType="Map" resultType="Integer">
+        select count(RecordInnerId) from Visitor_OrderRecord where UserInnerId = #{UserInnerId} and
+        (DateDiff(dd,RecordTime,getdate())=0  or  VisitorState in (1,4,5,7)) and OrderType = #{OrderType}
+    </select>
+
+    <!--查询公司或个人预约记录 -->
+    <select id="searchOrderRecord" parameterType="Map" resultType="OrderRecord">
+        select <include refid="orderSql"></include>,pc.Money as Money from Visitor_OrderRecord vo left join
+        Park_ChargeRecord pc on vo.RecordInnerId = pc.VisRecordInnerId
+        <where>
+            <if test="RecordInnerId!=null and RecordInnerId!=''">
+                and RecordInnerId = #{RecordInnerId}
+            </if>
+            <if test="UserInnerId!=null and UserInnerId!=''">
+                and UserInnerId = #{UserInnerId}
+            </if>
+            <if test="VisitorCarCode!=null and VisitorCarCode!=''">
+                and VisitorCarCode = #{VisitorCarCode}
+            </if>
+            <!-- 查询状态-->
+            <if test="VisitorState!=null and VisitorState!=''">
+                and VisitorState in (${VisitorState})
+            </if>
+            <if test="ACInfo!=null">
+                and ACInfo is null
+            </if>
+            <!-- 查询当前和之前为交费的数据 -->
+            <if test="VisitorStateNow!=null and VisitorStateNow!=''">
+                and (VisitorState in (${VisitorStateNow}) or <![CDATA[ DateDiff(dd,VisitorBeginTime,getdate())<=0 ]]>)
+            </if>
+            <!-- 查两个小时之后数据比较预约时间查询出对应记录下发停车场权限-->
+            <if test="VisitorSendTime!=null and VisitorSendTime!=''">
+                and VisitorBeginTime between DATEAdd(n,-20,getdate()) and DATEAdd(hh,2,getdate())
+            </if>
+            <!-- 查询历史的数据 -->
+            <if test="VisitorStateHis!=null and VisitorStateHis!=''">
+                and  <![CDATA[ DateDiff(dd,VisitorBeginTime,getdate())>0 ]]>
+            </if>
+            <if test="OrderType!=null and OrderType!=''">
+                and OrderType = #{OrderType}
+            </if>
+        </where>
+        order by VisitorBeginTime desc
+    </select>
+
+    <!--统计公司或个人预约记录 -->
+    <select id="searchOrderRecordCount" parameterType="Map" resultType="Integer">
+        select count(RecordInnerId) from Visitor_OrderRecord
+        <where>
+            <if test="RecordInnerId!=null and RecordInnerId!=''">
+                and RecordInnerId = #{RecordInnerId}
+            </if>
+            <if test="UserInnerId!=null and UserInnerId!=''">
+                and UserInnerId = #{UserInnerId}
+            </if>
+            <if test="VisitorCarCode!=null and VisitorCarCode!=''">
+                and VisitorCarCode = #{VisitorCarCode}
+            </if>
+            <!-- 查询状态-->
+            <if test="VisitorState!=null and VisitorState!=''">
+                and VisitorState in (${VisitorState})
+            </if>
+            <!-- 查询当前和之前为交费的数据 -->
+            <if test="VisitorStateNow!=null and VisitorStateNow!=''">
+                and (VisitorState in (${VisitorStateNow}) or <![CDATA[ DateDiff(dd,VisitorBeginTime,getdate())<=0 ]]>)
+            </if>
+            <!-- 查询历史的数据 -->
+            <if test="VisitorStateHis!=null and VisitorStateHis!=''">
+                and  <![CDATA[ DateDiff(dd,VisitorBeginTime,getdate())>0 ]]>
+            </if>
+            <if test="OrderType!=null and OrderType!=''">
+                and OrderType = #{OrderType}
+            </if>
+
+        </where>
+
+    </select>
+
+
+
+    <!--查询公司或个人预约记录 集合-->
+    <select id="searchOrderRecordList" parameterType="Map" resultType="OrderRecord">
+        select <include refid="orderSql"></include> from Visitor_OrderRecord
+        <where>
+            <if test="RecordInnerId!=null and RecordInnerId!=''">
+                and RecordInnerId = #{RecordInnerId}
+            </if>
+            <if test="UserInnerId!=null and UserInnerId!=''">
+                and UserInnerId = #{UserInnerId}
+            </if>
+            <if test="VisitorCarCode!=null and VisitorCarCode!=''">
+                and (VisitorCarCode = #{VisitorCarCode} and VisitorState in (${VisitorStateIn}) or VisitorState = 8)
+            </if>
+            <!-- 查询状态-->
+            <if test="VisitorState!=null and VisitorState!=''">
+                and VisitorState in (${VisitorState})
+            </if>
+            <if test="OrderType!=null and OrderType!=''">
+                and OrderType in (${OrderType})
+            </if>
+        </where>
+        order by VisitorBeginTime asc
+    </select>
+
+    <!-- 插入预约记录 -->
+    <insert id="insertOrderRecord" parameterType="OrderRecord">
+        insert into Visitor_OrderRecord (<include refid="orderSqlNoId"></include> ) values
+        (#{VisitorInfoInnerId},#{VisitorName},#{VisitorEmail},#{VisitorIDCode},#{VisitorCompany},#{UserInnerId},#{VisitorThing},#{VisitorPhoto},#{VisitorInPhoto},#{VisitorNum},#{VisitorCarCode},#{VisitorBeginTime},#{VisitorEndTime},getdate(),#{OrderType},#{OrderCode},(select
+        UserName from System_UserInfo where UserInnerId = #{UserInnerId}),(select DepartMentName from View_UserAll where
+        UserInnerId =
+        #{UserInnerId}),#{VisitorState},#{ApproveTime},#{CameraState},#{Remark},#{CardId},#{ACInfo},#{CarTypeInnerId})
+    </insert>
+
+    <!-- 插入访客信息 -->
+    <insert id="insertVisitorUserInfo" parameterType="VisitorUserInfo" useGeneratedKeys="true"
+            keyProperty="VisitorInfoInnerId">
+        insert into Visitor_UserInfo (<include refid="visitorSqlNoId"></include> ) values
+        (#{VisitorName},#{VisitorEmail},#{VisitorSex},#{VisitorIDType},#{VisitorIDCode},#{VisitorBirthday},#{VisitorCar},#{VisitorPhone},#{VisitorPwd},#{VisitorPwdStates},#{VisitorState},#{VisitorLock},getdate(),#{VisitorVerifyDate},#{VisitorCompany},#{VisitorAddress},#{VisitorPosition},#{VisitorNikeName},#{VisitorLocation},0,#{StandByA})
+    </insert>
+
+
+    <!-- 查询访客信息 -->
+    <select id="searchVisitorUserInfo" parameterType="Map" resultType="VisitorUserInfo">
+        select <include refid="visitorSql"></include> from Visitor_UserInfo
+        <where>
+            <if test="VisitorName!=null and VisitorName!=''">
+                and VisitorName = #{VisitorName}
+            </if>
+            <if test="VisitorCompany!=null and VisitorCompany!=''">
+                and VisitorCompany = #{VisitorCompany}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询访客缴费详情信息 -->
+    <select id="searchRecordDetails" parameterType="Map" resultType="ChargeRecord">
+        select <include refid="chargeRecSql"></include> from Park_ChargeRecord
+        <where>
+            <if test="VisRecordInnerId!=null and VisRecordInnerId!=''">
+                and VisRecordInnerId = #{VisRecordInnerId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 更新记录状态 -->
+    <update id="updateRecordStates" parameterType="Map">
+        update Visitor_OrderRecord set
+
+        VisitorState = #{VisitorState}
+
+        where RecordInnerId = #{RecordInnerId}
+    </update>
+
+    <!-- 更新记录发送状态 -->
+    <update id="updateRecordAC" parameterType="Map">
+        update Visitor_OrderRecord set
+
+        ACInfo = 1
+
+        where RecordInnerId = #{RecordInnerId}
+    </update>
+
+
+    <!-- 查看部门账户余额 -->
+    <select id="searchDepartmentMoney" parameterType="Integer" resultType="Integer">
+        select Money from System_Account where AccountTypeInnerId = 1 and UserInnerId = (select UserInnerId from
+        System_UserInfo where
+        DepartmentInnerId = #{DepartmentInnerId} and UserTypeInnerId = -1 )
+    </select>
+
+
+    <select id="searchDepartmentUpTwo" parameterType="Map" resultType="Department">
+        select <include refid="DepartmentSql"></include> from System_Department where DepartmentInnerId =
+        #{DepartmentInnerId}
+        <if test="DepartmentLevel != null and DepartmentLevel != ''">
+            and DepartmentLevel = #{DepartmentLevel}
+        </if>
+    </select>
+
+
+    <!-- 查看配置表 -->
+    <select id="searchConfigInfo" parameterType="Integer" resultType="ParkConfig">
+        select ConfigInnerId,MinMoney,NoMoneyATime,NoMoneyBTime from Park_Config
+    </select>
+    <!-- 车辆类型集合 -->
+    <select id="searchCarType" parameterType="Map" resultType="ParkCartype">
+        select CarTypeInnerId,CarTypeId,CarTypeName,Remark from Park_CarType where DelFlag = 0 and CarTypeInnerId in
+        (2,3)
+    </select>
+    <!-- 修改记录信息 -->
+    <update id="updateRecordInfo" parameterType="Map">
+        update Park_ChargeRecord set
+        <trim suffixOverrides=",">
+            <if test="outTradeNo != null and outTradeNo != ''">
+                OrderNo = #{outTradeNo},
+            </if>
+        </trim>
+        where VisRecordInnerId = #{RecordInnerId}
+    </update>
+    <!--查询消费详情-->
+    <select id="searchChargeRecord" parameterType="Map" resultType="ChargeRecord">
+        select <include refid="chargeRecSql"></include> from Park_ChargeRecord
+        <where>
+            <if test="recordInnerId!=null and recordInnerId!=''">
+                and VisRecordInnerId = #{recordInnerId}
+            </if>
+            <if test="userInnerId!=null and userInnerId!=''">
+                and UserInnerId = #{userInnerId}
+            </if>
+            <if test="outTradeNo!=null and outTradeNo!=''">
+                and OrderNo = #{outTradeNo}
+            </if>
+        </where>
+    </select>
+
+    <!-- 插入停车消费记录 -->
+    <insert id="insertChargeRecord" parameterType="ChargeRecord" useGeneratedKeys="true"
+            keyProperty="ChargeRecordInnerId">
+        insert into Park_ChargeRecord (<include refid="chargeRecSqlNoId"></include>) values
+        (getdate(),#{CarNumber},#{InTime},#{OutTime},#{Money},#{CarType},#{ChargeState},#{StandbyA},#{StandbyB},#{VisRecordInnerId},#{OrderNo},#{ChargeTime},#{ChargeType})
+    </insert>
+
+    <!-- 修改记录信息 -->
+    <update id="updateRecordInfoByNo" parameterType="Map">
+        update Park_ChargeRecord set
+        <trim suffixOverrides=",">
+
+            <if test="chargeState != null and chargeState != ''">
+                ChargeState = #{chargeState},ChargeTime = getdate(),
+            </if>
+            <if test="totalFee != null and totalFee != ''">
+                Money = #{totalFee},
+            </if>
+            <if test="chargeType != null and chargeType != ''">
+                ChargeType = #{chargeType},
+            </if>
+            <if test="transactionId != null and transactionId != ''">
+                OrderNo = #{transactionId},
+            </if>
+        </trim>
+        where OrderNo = #{outTradeNo}
+    </update>
+    <!-- 更新金额-->
+    <update id="updateRecordMoney" parameterType="Map">
+        update Park_ChargeRecord set
+
+        <trim suffixOverrides=",">
+
+            <if test="chargeState != null and chargeState != ''">
+                ChargeState = #{chargeState},ChargeTime = getdate(),
+            </if>
+            <if test="Money != null and Money != ''">
+                Money = #{Money},
+            </if>
+            <if test="chargeType != null and chargeType != ''">
+                ChargeType = #{chargeType},
+            </if>
+            <if test="OutTime != null and OutTime != ''">
+                OutTime = getdate(),
+            </if>
+            <if test="OrderNo != null and OrderNo != ''">
+                OrderNo = #{OrderNo},
+            </if>
+        </trim>
+        <where>
+            <if test="recordInnerId!=null and recordInnerId!=''">
+                and VisRecordInnerId = #{recordInnerId}
+            </if>
+            <if test="ChargeRecordInnerId!=null and ChargeRecordInnerId!=''">
+                and ChargeRecordInnerId = #{ChargeRecordInnerId}
+            </if>
+        </where>
+    </update>
+
+    <!-- 新增消费记录（误消费补款） -->
+    <insert id="insertConLog" parameterType="ConLog">
+        INSERT INTO Consumption_Conlog_Discount
+        (
+        <include refid="ConLogSqlNoId"/>
+        )
+        VALUES
+        (#{MarkInnerId},#{MarkId},#{MarkTypeInnerId},#{UserInnerId},(select DepartmentInnerId from System_UserInfo where UserInnerId = #{UserInnerId}),#{CompanyInnerId},#{ConTerminalInnerId},#{TerminalTypeInnerId},#{MerchantInnerId},#{AppInnerId},#{AreaInnerId},#{PersonMoney},#{AllowanceMoney},#{NumberMoney},#{PersonBFMoney},#{PersonAFMoney},#{AllowanceBFMoney},#{AllowanceAFMoney},#{NumberBFMoney},#{NumberAFMoney},#{Money1},#{Money2},#{Money},#{DiscountMoney},#{Proportion},getdate(),getdate(),#{ConTypeInnerId},#{ConPattern},#{ConWay},#{LimitTimes},#{OffLine},#{ErrorConLogInnerId},#{Operator},#{Remark},#{StandbyA},#{StandbyB},#{StandbyC},#{StandbyD},#{Rules})
+    </insert>
+
+    <select id="searchGwCarInfo" parameterType="String" resultType="int">
+
+        select count(GWCarInnerId) from Park_GWCar where CarNumber = #{CarNumber} and DelFlag = 0
+
+    </select>
+
+    <!-- 查询部门余额 -->
+    <select id="selectDeptMoney" parameterType="Map" resultType="Department">
+        select  sd.DepartmentInnerId as DepartmentInnerId from System_Department sd inner join System_UserInfo su on
+        sd.DepartmentInnerId = su.DepartmentInnerId inner join System_Account sa
+        on su.UserInnerId = sa.UserInnerId where  su.UserTypeInnerId = -1
+        and sa.AccountTypeInnerId = 1 and sa.Money <![CDATA[ <= ]]> (select MinMoney from Park_Config) and sd.DelFlag = 0
+    </select>
+
+    <!-- 查询子部门信息 -->
+    <select id="selectDeptChid" parameterType="Integer" resultType="Integer">
+        select  DepartmentInnerId from System_Department where UpInnerId = #{UpInnerId} and DelFlag = 0
+    </select>
+    <!-- 插入车辆数量日期-->
+    <insert id="insertParkDate" parameterType="Map">
+        insert into Park_Date (ParkDate,ParkType,ParkNum,ParkResidue) values (#{ParkDate},#{ParkType},(select ${ParkNum} from  Park_Info where ParkInfoInnerId =1),(select ${ParkNum} from  Park_Info where ParkInfoInnerId =1))
+    </insert>
+
+    <!-- 插入车辆数量日期-->
+    <select id="searchParkNumBy" parameterType="Map" resultType="Map">
+       select  CONVERT(varchar(100),ParkDate,23) as ParkDate,ParkResidue  from Park_Date where ParkType = #{ParkType}  and ParkDate >= CONVERT(varchar(100),GETDATE(),23)
+    </select>
+
+    <!-- -->
+    <select id="searchOrderTime" parameterType="Map" resultType="int">
+
+        select count(RecordInnerId) from Visitor_OrderRecord
+        <where>
+            <!-- 查询状态-->
+        <if test="VisitorState!=null and VisitorState!=''">
+                and VisitorState in (${VisitorState})
+        </if>
+
+        <if test="VisitorCarCode!=null and VisitorCarCode!=''">
+               and  VisitorCarCode = #{VisitorCarCode}
+        </if>
+
+        <if test="VisitorBeginTime!=null and VisitorBeginTime!=''">
+            and #{VisitorBeginTime}  <![CDATA[ <= ]]> VisitorEndTime and #{VisitorEndTime} >=VisitorBeginTime
+        </if>
+        </where>
+    </select>
+
+   <!-- 通行记录 -->
+    <select id="selectCarRecord" parameterType="Map" resultType="Map">
+      select top 1 CarRecordInnerId,CarNumber,EntryTime,InOrOut,ChannelId   from Park_CarRecord where CarNumber = #{VisitorCarCode} order by EntryTime desc
+    </select>
+
+    <!-- 查询配置库部门公司信息 -->
+    <select id="selectPayInfo" parameterType="Map" resultType="Integer">
+       select count(*) from System_PayInfo where DelFlag = 0
+       <if test="CompanyInnerId!=null and CompanyInnerId!=''">
+           and CompanyInnerId = #{CompanyInnerId}
+       </if>
+       <if test="DepartmentInnerId!=null and DepartmentInnerId!=''">
+           and DepartmentInnerId = #{DepartmentInnerId}
+       </if>
+    </select>
+
+    <!-- 配置库列表 -->
+    <select id="selectPayInfoList" resultType="Integer">
+       select DepartmentInnerId from System_PayInfo where  DelFlag = 0
+    </select>
+
+    <!-- 查询父部门信息 -->
+    <select id="selectDeptParent" parameterType="Integer" resultType="Integer">
+        select  UpInnerId from System_Department where DepartmentInnerId = #{DepartmentInnerId} and DelFlag = 0
+    </select>
+
+
+
+    <!--查询车辆历史 集合-->
+    <select id="searchOrderRecordHis" parameterType="Map" resultType="Map">
+        select distinct top 5 VisitorCarCode as text from Visitor_OrderRecord
+       where OrderType = #{OrderType} and UserInnerId = #{UserInnerId}
+    </select>
+
+
+
+</mapper>

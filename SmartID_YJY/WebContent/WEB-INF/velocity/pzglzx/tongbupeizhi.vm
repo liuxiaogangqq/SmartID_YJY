@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>停车管理系统|配置管理中心</title>
+ #parse("/common/header-meta-link.vm")
+  <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="pzglright.html">配置管理中心</a>
+    /<span>门禁同步配置</span>
+  </p>
+  <div class="row top54">
+  </div>
+  <div class="row" style="margin-top:5px;"><div class="col-sm-12 text-right">
+	  <button type="button" class="btn btn-primary" id="update">修改</button>
+    </div></div>
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table" class="easyui-datagrid"  style="height:450px">
+	</table>
+  </div>
+</div>
+
+
+	
+<!--修改弹出框-->
+<div class="modal fade" id="updateDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">修改配置</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="updateForm">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">参数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="canshu" name="canshu" readonly="true">
+							<input type="hidden" class="form-control inp" id="flag" name="flag" readonly="true">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">参数值：</label>
+						<div class="col-sm-9">
+							<textarea class="form-control" id="canshuzhi" name="canshuzhi" style="width:250px; height:200px"></textarea>
+						</div>
+				    </div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="updateSubmit">修改</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<script src="js/mjglxt/tongbupeizhi.js"></script>
+</body>
+</html>

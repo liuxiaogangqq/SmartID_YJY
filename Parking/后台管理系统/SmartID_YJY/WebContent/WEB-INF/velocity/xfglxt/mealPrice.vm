@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|消费管理系统</title>
+ #parse("/common/header-meta-link.vm")
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="xfglright.html">消费管理系统</a>
+    /<span>餐次价格</span>
+  </p>
+  <div class="row top54">
+  </div>
+  <div class="row" style="margin-top:5px;"><div class="col-sm-12 text-right">
+      <button type="button" class="btn btn-primary" id="select">查询</button>
+	  <button type="button" class="btn btn-primary" id="insert">添加</button>
+	  <button type="button" class="btn btn-primary" id="update">修改</button>
+	  <button type="button" class="btn btn-primary" id="delete">删除</button>
+    </div></div>
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table" class="easyui-datagrid"  style="height:450px">
+	</table>
+  </div>
+</div>
+
+
+<!--添加弹出框-->
+<div class="modal fade" id="insertDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">添加餐次价格</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="insertForm">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*人员类型：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iUserTypeInerId" name="UserTypeInerId" style="width:250px;height:30px">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*商户：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iMerchantInnerId" name="MerchantInnerId" style="width:250px;height:30px">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*早餐首次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iBreakfastFirst" name="BreakfastFirst" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*早餐多次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iBreakfastNext" name="BreakfastNext" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*早餐最多次数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iBreakfastNums" name="BreakfastNums" value="1">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*午餐首次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iLunchFirst" name="LunchFirst" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*午餐多次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iLunchNext" name="LunchNext" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*午餐最多次数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iLunchNums" name="LunchNums" value="1">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*晚餐首次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iDinnerFirst" name="DinnerFirst" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*晚餐多次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iDinnerNext" name="DinnerNext" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*晚餐最多次数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iDinnerNums" name="DinnerNums" value="1">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*夜餐首次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iNightFirst" name="NightFirst" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*夜餐多次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iNightNext" name="NightNext" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*夜餐最多次数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iNightNums" name="NightNums" value="1">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="insertSubmit">添加</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+	
+<!--修改弹出框-->
+<div class="modal fade" id="updateDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">修改餐次价格</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="updateForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*人员类型：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uUserTypeInerId" name="UserTypeInerId" style="width:250px;height:30px">
+							<input type="hidden" class="form-control inp" id="uMealPriceInnerId" name="MealPriceInnerId">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*商户：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMerchantInnerId" name="MerchantInnerId" style="width:250px;height:30px">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*早餐首次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uBreakfastFirst" name="BreakfastFirst" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*早餐多次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uBreakfastNext" name="BreakfastNext" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*早餐最多次数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uBreakfastNums" name="BreakfastNums" value="1">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*午餐首次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uLunchFirst" name="LunchFirst" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*午餐多次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uLunchNext" name="LunchNext" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*午餐最多次数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uLunchNums" name="LunchNums" value="1">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*晚餐首次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uDinnerFirst" name="DinnerFirst" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*晚餐多次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uDinnerNext" name="DinnerNext" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*晚餐最多次数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uDinnerNums" name="DinnerNums" value="1">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*夜餐首次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uNightFirst" name="NightFirst" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*夜餐多次价格：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uNightNext" name="NightNext" value="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*夜餐最多次数：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uNightNums" name="NightNums" value="1">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="updateSubmit">修改</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+
+
+<script src="js/xfglxt/mealPrice.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>停车管理系统|配置管理中心</title>
+ #parse("/common/header-meta-link.vm")
+<script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+</head>
+<body>
+<div class="container-fluid" >
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="pzglright.html">配置管理中心</a>
+    /<span>我的信息</span>
+  </p>
+  <div class="row border1">
+	<div class="col-sm-12 text-right">
+      <button type="button" class="btn btn-link" id="update">修改基本信息</button>
+      <button type="button" class="btn btn-link" id="updatePWD">修改密码</button>
+    </div>
+  </div>
+  <div class="row" style="margin-top:20px;">
+    <div class="col-sm-3">
+      <label>登录名：</label>
+      <input type="text" class="form-control" id="OperatorId" name="OperatorId" readonly="readonly">
+	  <input type="hidden" class="form-control" id="OperatorInnerId" name="OperatorInnerId">
+	  <input type="hidden" class="form-control" id="PageList" name="PageList">
+	  <input type="hidden" class="form-control" id="AreaList" name="AreaList">
+	  <input type="hidden" class="form-control" id="AppList" name="AppList">
+	  <input type="hidden" class="form-control" id="CompanyList" name="CompanyList">
+	  <input type="hidden" class="form-control" id="DepartmentList" name="DepartmentList">
+    </div>
+    <div class="col-sm-3">
+      <label>用户姓名：</label>
+      <input type="text" class="form-control" id="OperatorName" name="OperatorName" readonly="readonly">
+    </div>
+	<div class="col-sm-3">
+		<label>表格行数：</label>
+		<select class="form-control" id="TableSize" name="TableSize">
+			<option value="7">显示8行（建议1366*768分辨率）</option>
+			<option value="10">显示10行（建议1440*900分辨率）</option>
+			<option value="15">显示15行（建议1920*1080分辨率）</option>
+			<option value="20">显示20行（建议1920*1200分辨率）</option>
+		</select>
+	</div>
+    <div class="col-sm-3" id="RemarkDiv">
+      <label id="RemarkLabel">备注：</label>
+      <input type="text" class="form-control" id="Remark" name="Remark">
+    </div>
+    <div class="col-sm-3" id="StandbyADiv">
+      <label id="StandbyALabel">备用1：</label>
+      <input type="text" class="form-control" id="StandbyA" name="StandbyA">
+    </div>
+	<div class="col-sm-3" id="StandbyBDiv">
+      <label id="StandbyBLabel">备用2：</label>
+      <input type="text" class="form-control" id="StandbyB" name="StandbyB">
+    </div>
+	<div class="col-sm-3" id="StandbyCDiv">
+      <label id="StandbyCLabel">备用3：</label>
+      <input type="text" class="form-control" id="StandbyC" name="StandbyC">
+    </div>
+	<div class="col-sm-3" id="StandbyDDiv">
+      <label id="StandbyDLabel">备用4：</label>
+      <input type="text" class="form-control" id="StandbyD" name="StandbyD">
+    </div>
+	<div class="col-sm-3">
+      <label>原密码：</label>
+      <input type="password" class="form-control" id="beforePassword" name="beforePassword">
+    </div>
+	<div class="col-sm-3">
+      <label>新密码：</label>
+      <input type="password" class="form-control" id="Password" name="Password">
+    </div>
+	<div class="col-sm-3">
+      <label>确认密码：</label>
+      <input type="password" class="form-control" id="affirmPassword" name="affirmPassword">
+    </div>
+  </div>
+  
+</div>
+
+
+
+<script src="js/pzglzx/myInfo.js"></script>
+</body>
+</html>

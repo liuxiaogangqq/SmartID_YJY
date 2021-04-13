@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {font-family:'微软雅黑'; font-size:14px; color:#666; }
+a,img {border:none; margin:0; padding:0;}
+.container-fluid {background-color:#fefefe; padding:0;}
+p.nav-bread {background-color:#f1f2f7; width:100%; height:47px; line-height:47px; border-top:1px solid #c8c7cc; border-bottom:1px solid #c8c7cc; padding-left:20px;}
+p.nav-bread a {text-decoration:underline;}
+p.nav-bread span {color:#bababb;}
+div.content {margin-left:20px;}
+/*资产管理系统----信息配置*/
+table.caozuo_list{margin: 10px auto; width:95%;}
+table.caozuo_list tr td{border-top:0px; padding-left:10px;}
+table.caozuo_list .form-control {display:inline-block;width:175px;}
+table.tab_list{width:99%;}
+table.tab_list tr th{text-align:center; border-bottom:0px;}
+table.tab_list tr.invalid {color: #ff0000;}
+ul.pags {margin-right: 2%;}
+#update1 .form-control,#update2 .form-control,#update3 .form-control,#update4 .form-control,#update5 .form-control {width:280px;}
+/*资产管理系统----资产登记*/
+.list_zcdj {width: 99%;}
+#add-zichan .form-control {display: inline-block;width:160px;}
+#add-zichan .input {width:150px;}
+#add-zichan .control-label {width:85px;}
+/*资产管理系统----资产管理*/
+p.p1 a {margin-left:20px;}
+.list_zichan {width: 99%; margin: 0 auto;}
+#tab-list {margin-top:1px;}
+#transfer .form-control {display:inline-block; width:180px;}
+#transfer .control-label {width:80px;}
+#transfer .combo {border-color: #ccc;}
+#copy .control-label {width:85px;}
+#copy .form-control {display:inline-block; width:160px;}
+#copy .input {width:150px;}
+#tab-trasfer3 .pager {margin-top: -10px;}
+#search .control-label {width:85px;}
+#search .form-control {display:inline-block; width:175px;}
+/*资产管理系统----资产统计*/
+.conditions {width:96%; margin:0 auto;}
+.conditions .form-control {width:180px; display:inline-block;}
+.conditions .spacing {margin-left: 10px; margin-right: 10px;}
+.tongji-tab {width: 98%; margin: 0 auto;}
+.tongji-tab thead tr th {text-align: center;}
+.combo {border-color: #ccc;}

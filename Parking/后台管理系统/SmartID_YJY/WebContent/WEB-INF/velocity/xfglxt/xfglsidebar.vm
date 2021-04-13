@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>智能一卡通平台|消费管理系统</title>
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/sidebar.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+        <![endif]-->
+	</head>
+	
+	<body>
+		<div class="container-fluid">
+			<ul class="list-unstyled">
+				<li class="li_title">消费管理系统</li>
+				<li id="501">
+					<a href="merchant.html" target="mainFrame">
+						<span id="title">商户管理</span>
+					</a>
+				</li>
+				<li id="508">
+					<a href="merchantDiscount.html" target="mainFrame">
+						<span id="title">商户优惠</span>
+					</a>
+				</li>
+				<li id="512">
+					<a href="merchantMenuType.html" target="mainFrame">
+						<span id="title">商户菜单</span>
+					</a>
+				</li>
+				<li id="511">
+					<a href="merchantMenus.html" target="mainFrame">
+						<span id="title">商户菜品</span>
+					</a>
+				</li>
+				<li id="510">
+					<a href="importMenus.html" target="mainFrame">
+						<span id="title">菜品导入</span>
+					</a>
+				</li>
+				<li id="502">
+					<a href="conType.html" target="mainFrame">
+						<span id="title">消费类型</span>
+					</a>
+				</li>
+				<!--<li>
+					<a href="timeRule.html" target="mainFrame">
+						<span id="title">计时消费规则</span>
+					</a>
+				</li>-->
+				<li id="503">
+					<a href="conTerminal.html" target="mainFrame">
+						<span id="title">消费设备</span>
+					</a>
+				</li>
+				<li id="504">
+					<a href="conLog.html" target="mainFrame">
+						<span id="title">消费记录</span>
+					</a>
+				</li>
+				<li id="505">
+					<a href="conStatistics.html" target="mainFrame">
+						<span id="title">消费统计</span>
+					</a>
+				</li>
+				<li id="513">
+					<a href="invoiceLog.html" target="mainFrame">
+						<span id="title">开发票</span>
+					</a>
+				</li>
+				<li id="514">
+					<a href="menuStatistics.html" target="mainFrame">
+						<span id="title">菜品统计</span>
+					</a>
+				</li>
+				<li id="515">
+					<a href="lsConStatistics.html" target="mainFrame">
+						<span id="title">临时卡消费统计</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<script src="jquery/jquery.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			var pageList =  '$!operatorSession.PageList';
+			if(pageList.indexOf("501") != -1){
+				document.getElementById("501").setAttribute("style","display:''");
+			}else{
+				document.getElementById("501").setAttribute("style","display:none");
+			}if(pageList.indexOf("502") != -1){
+				document.getElementById("502").setAttribute("style","display:''");
+			}else{
+				document.getElementById("502").setAttribute("style","display:none");
+			}if(pageList.indexOf("503") != -1){
+				document.getElementById("503").setAttribute("style","display:''");
+			}else{
+				document.getElementById("503").setAttribute("style","display:none");
+			}if(pageList.indexOf("504") != -1){
+				document.getElementById("504").setAttribute("style","display:''");
+			}else{
+				document.getElementById("504").setAttribute("style","display:none");
+			}if(pageList.indexOf("505") != -1){
+				document.getElementById("505").setAttribute("style","display:''");
+			}else{
+				document.getElementById("505").setAttribute("style","display:none");
+			}if(pageList.indexOf("508") != -1){
+				document.getElementById("508").setAttribute("style","display:''");
+			}else{
+				document.getElementById("508").setAttribute("style","display:none");
+			}if(pageList.indexOf("510") != -1){
+				document.getElementById("510").setAttribute("style","display:''");
+			}else{
+				document.getElementById("510").setAttribute("style","display:none");
+			}if(pageList.indexOf("511") != -1){
+				document.getElementById("511").setAttribute("style","display:''");
+			}else{
+				document.getElementById("511").setAttribute("style","display:none");
+			}if(pageList.indexOf("512") != -1){
+				document.getElementById("512").setAttribute("style","display:''");
+			}else{
+				document.getElementById("512").setAttribute("style","display:none");
+			}if(pageList.indexOf("513") != -1){
+				document.getElementById("513").setAttribute("style","display:''");
+			}else{
+				document.getElementById("513").setAttribute("style","display:none");
+			}if(pageList.indexOf("514") != -1){
+				document.getElementById("514").setAttribute("style","display:''");
+			}else{
+				document.getElementById("514").setAttribute("style","display:none");
+			}if(pageList.indexOf("515") != -1){
+				document.getElementById("515").setAttribute("style","display:''");
+			}else{
+				document.getElementById("515").setAttribute("style","display:none");
+			}
+			
+		</script>
+		<script>
+			$(function(){
+				$(".list-unstyled li a").click(function(){	
+		           $(this).addClass("a_active").parent().siblings().find("a").removeClass("a_active");
+		           $(this).css({"border-left":"4px solid #245cc8","border-right":"4px solid #052e7c"}).parent().siblings().find("a").css({"border-left":"4px solid #21458f","border-right":"4px solid #21458f"});
+				})
+
+				var sidebar_h = $(window).height();
+				$("#sidebar-h").css("height",sidebar_h);
+			})
+		</script>
+	</body>
+</html>

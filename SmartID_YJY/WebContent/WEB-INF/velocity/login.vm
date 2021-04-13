@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>停车管理系统|登录</title>
+    <link href="css/login.css" rel="stylesheet" type="text/css">
+    <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript">
+        	window.onload=function(){
+        	document.getElementById('login_form').action='login.html?time='+new Date().getTime();
+    	}
+	</script>
+</head>
+<body>
+<div id="cont">
+    <div id="login_cont">
+        <!--<div class="login_left"></div>-->
+        <div class="login_right">
+            <header class="login_r_head"></header>
+            <form id="login_form" class="login_form" method="post">
+                <input type="text" id="OperatorId" name="OperatorId" placeholder="用户名">
+                <input type="password" id="Password" name="Password" placeholder="密码" style="margin-top: 1em">
+						<p class="text-error" style="color:#FF0000">$!actionResult</p>
+                <div>
+                    <div>
+                        <button type="submit" class="buttoms">登	录</button>
+                        <!--<button class="buttoms">注册</button>-->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

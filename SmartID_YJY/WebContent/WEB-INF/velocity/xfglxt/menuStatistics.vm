@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|消费管理系统</title>
+ #parse("/common/header-meta-link.vm")
+ <style type="text/css">
+ .row label{width:70px;}
+ </style>
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+ <div id="readobject" style="display: none" >
+ <OBJECT
+	  classid="clsid:CEA82072-043E-4023-BF5E-4AAE4AF1454B" 
+	  width=100
+	  height=100
+	  align=center
+	  hspace=0
+	  vspace=0
+	  id = SmartID_zr	  
+>
+  </OBJECT>
+ </div>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="xfglright.html">消费管理系统</a>
+    /<span>菜品统计</span>
+  </p>
+  <div class="row"><div class="col-sm-12 border1 text-right">
+      <button type="button" class="btn btn-link" id="select">查询</button>
+	  <button type="button" class="btn btn-link" id="export">导出</button>
+    </div></div>
+  <div class="row" style="margin-top:20px;">
+	<div class="col-sm-3">
+      <label>开始时间：</label>
+      <input type="text" class="form-control" id="sStartTime" name="StartTime">
+    </div>
+	<div class="col-sm-3">
+      <label>结束时间：</label>
+      <input type="text" class="form-control" id="sEndTime" name="EndTime">
+    </div>
+	<div class="col-sm-3">
+      <label>时间模式：</label>
+      <select class="form-control" id="sTimeType" name="TimeType">
+			<option value="UploadDatetime">按上传时间统计</option>
+			<option value="ConDatetime">按消费时间统计</option>
+	  </select>
+    </div>
+	<div class="col-sm-3">
+      <label>商户设备：</label>
+      <input type="text" class="form-control" id="sTerminalTypeInnerId" name="TerminalTypeInnerId" style="width:170px;height:28px">
+    </div>
+  </div>
+  <hr class="w98">
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table"   style="height:450px">
+	</table>
+  </div>
+</div>
+</div>
+
+
+<div class="modal fade" id="myXiazai">
+    <div class="modal-dialog">
+        <div class="modal-content"> 
+            <div class="modal-header">
+    			<button type="button" class="close" data-dismiss="modal"> 
+    				<span aria-hidden="true">&times;</span>
+    				<span class="sr-only">Close</span>
+    			</button>
+    			<h4 class="modal-title">导出成功</h4>
+			</div>
+            <div class="modal-body">
+                <div id="xiazai">
+    			</div>
+            </div>
+		</div>
+    </div>
+</div>
+
+<script src="js/xfglxt/menuStatistics.js"></script>
+</body>
+</html>

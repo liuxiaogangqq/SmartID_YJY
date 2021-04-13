@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|账户业务中心</title>
+ #parse("/common/header-meta-link.vm")
+  <style type="text/css">
+ .row label{width:70px;}
+ </style>
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+<div id="readobject" style="display: none" >
+ <OBJECT
+	  classid="clsid:CEA82072-043E-4023-BF5E-4AAE4AF1454B" 
+	  width=100
+	  height=100
+	  align=center
+	  hspace=0
+	  vspace=0
+	  id = SmartID_zr	  
+>
+  </OBJECT>
+ </div>
+
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="zhywright.html">账户业务中心</a>
+    /<span>充/减值统计</span>
+  </p>
+  <div class="row"><div class="col-sm-12 border1 text-right">
+	  <!--<button type="button" class="btn btn-link" id="readCard">读卡</button>-->
+      <button type="button" class="btn btn-link" id="select">查询</button>
+	  <button type="button" class="btn btn-link"	id="export">导出</button>
+    </div></div>
+  <div class="row" style="margin-top:20px;">
+	<div class="col-sm-3">
+      <label>公司部门：</label>
+      <input type="text" class="form-control" id="sDepartmentInnerId" name="DepartmentInnerId" style="width:170px;height:28px">
+    </div>
+    <div class="col-sm-3">
+      <label>人员编号：</label>
+      <input type="text" class="form-control" id="sUserId" name="UserId"  onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3">
+      <label>人员姓名：</label>
+      <input type="text" class="form-control" id="sUserName" name="UserName"  onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <!--<div class="col-sm-3" id="sRemarkDiv">
+      <label id="sRemarkLabel">备注：</label>
+      <input type="text" class="form-control" id="sRemark" name="Remark">
+    </div>
+    <div class="col-sm-3" id="sStandbyADiv">
+      <label id="sStandbyALabel">备用1：</label>
+      <input type="text" class="form-control" id="sStandbyA" name="StandbyA">
+    </div>
+	<div class="col-sm-3" id="sStandbyBDiv">
+      <label id="sStandbyBLabel">备用2：</label>
+      <input type="text" class="form-control" id="sStandbyB" name="StandbyB">
+    </div>
+	<div class="col-sm-3" id="sStandbyCDiv">
+      <label id="sStandbyCLabel">备用3：</label>
+      <input type="text" class="form-control" id="sStandbyC" name="StandbyC">
+    </div>
+	<div class="col-sm-3" id="sStandbyDDiv">
+      <label id="sStandbyDLabel">备用4：</label>
+      <input type="text" class="form-control" id="sStandbyD" name="StandbyD">
+    </div>-->
+	<div class="col-sm-3">
+      <label>充值方式：</label>
+		<select  multiple="multiple" id="sRechargeType" name="RechargeType"style="height:28px; width:170px; ">
+			<option value="0">平台有卡</option>
+			<option value="1">平台无卡</option>
+			<option value="4">微信app</option>
+			<option value="5">现金圈存机</option>
+			<option value="6">银行圈存机</option>
+		</select>
+    </div>
+	
+	<div class="col-sm-3">
+      <label>开始时间：</label>
+      <input type="text" class="form-control" id="sStartTime" name="StartTime">
+    </div>
+	<div class="col-sm-3">
+      <label>结束时间：</label>
+      <input type="text" class="form-control" id="sEndTime" name="EndTime">
+    </div>
+	<div class="col-sm-3">
+      <label>统计方式：</label>
+		<select class="form-control" id="sRowName" name="RowName">
+			<option value="RechargeType">按充值方式统计</option>
+			<option value="MoneySource">按资金来源统计</option>
+			<option value="Operator">按操作人统计</option>
+			<option value="Year">按年统计</option>
+			<option value="Month">按月统计</option>
+			<option value="Day">按日统计</option>
+			<option value="CompanyInnerId">按公司统计</option>
+	  </select>
+    </div>
+	<div class="col-sm-3">
+      <label>资金来源：</label>
+		<select  multiple="multiple" id="sMoneySource" name="MoneySource" style="height:28px; width:170px; ">
+			<option value="0">现金</option>
+			<option value="1">微信</option>
+			<option value="2">支付宝</option>
+			<option value="3">银行卡</option>
+			<option value="4">支票</option>
+			<option value="5">空充</option>
+		</select>
+    </div>
+	<div class="col-sm-3">
+      <label>操作人：</label>
+      <input type="text" class="form-control" id="sOperator" name="Operator" style="width:170px;height:28px">
+    </div>
+	<div class="col-sm-3">
+      <label>报表类型：</label>
+      <select class="form-control" id="sType" name="Type">
+			<option value="sum">金额报表</option>
+			<option value="count">人次报表</option>
+	  </select>
+    </div>
+	
+	
+	
+  </div>
+  <hr class="w98">
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table" class="easyui-datagrid"  style="height:450px">
+	</table>
+  </div>
+</div>
+
+<div class="modal fade" id="myXiazai">
+    <div class="modal-dialog">
+        <div class="modal-content"> 
+            <div class="modal-header">
+    			<button type="button" class="close" data-dismiss="modal"> 
+    				<span aria-hidden="true">&times;</span>
+    				<span class="sr-only">Close</span>
+    			</button>
+    			<h4 class="modal-title">导出成功</h4>
+			</div>
+            <div class="modal-body">
+                <div id="xiazai">
+    			</div>
+            </div>
+		</div>
+    </div>
+</div>
+
+<script src="js/zhywzx/accountStatistics.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhsr.wx.cp.mapper.LogMapper">
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        OperatorInnerId, OperatorDate, OperatorType,
+        OperatorContent,OperatorIP,ActionsArgs,Succeed,MethodName,Message,ModelName,LogDescription,CreateTime,ClassName,ActionN
+    </sql>
+
+    <insert id="insertOperator" parameterType="OperatorLog">
+        insert into System_OperatorLog (<include refid="Base_Column_List"></include>) values (#{OperatorInnerId},
+        #{OperatorDate}, #{OperatorType},
+        #{OperatorContent},#{OperatorIp},#{ActionsArgs},#{Succeed},#{MethodName},#{Message},#{ModelName},#{LogDescription},getdate(),#{ClassName},#{ActionN})
+    </insert>
+
+</mapper>

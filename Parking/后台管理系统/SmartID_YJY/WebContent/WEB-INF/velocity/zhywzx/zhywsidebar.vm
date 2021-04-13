@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>智能一卡通平台|账户业务中心</title>
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/sidebar.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+		<script src="js/respond.min.js"></script>
+        <![endif]-->
+	</head>
+	
+	<body>
+		<div class="container-fluid">
+			<ul class="list-unstyled">
+				<li class="li_title">账户业务中心</li>
+				<!--<li id="307"><a href="accountDiscount.html" target="mainFrame"><span id="title">充值优惠</span></a></li>
+				<li id="301"><a href="readCardRecharge.html" target="mainFrame"><span id="title">读卡充减值</span></a></li>
+				<li id="302"><a href="queryRecharge.html" target="mainFrame"><span id="title">账户充减值</span></a></li>-->
+				<li id="302"><a href="DepRecharge.html" target="mainFrame"><span id="title">部门充减值</span></a></li>
+				<!--<li><a href="dimission.html" target="mainFrame"><span id="title">离职退款</span></a></li>
+				<li id="305"><a href="importAllowance.html" target="mainFrame"><span id="title">补贴导入</span></a></li>-->
+				<!--<li><a href="importNumber.html" target="mainFrame"><span id="title">次充值导入</span></a></li>-->
+				<li id="303"><a href="accountLog.html" target="mainFrame"><span id="title">充减值查询</span></a></li>
+				<li id="304"><a href="accountStatistics.html" target="mainFrame"><span id="title">充减值统计</span></a></li>
+				<!--<li id="309"><a href="Settlement.html" target="mainFrame"><span id="title">日结信息</span></a></li>
+				<li id="310"><a href="payment.html" target="mainFrame"><span id="title">财务/商户结算</span></a></li>
+				<li id="312"><a href="lsAccountLog.html" target="mainFrame"><span id="title">临时卡充值查询</span></a></li>
+				<li id="311"><a href="lsAccountStatistics.html" target="mainFrame"><span id="title">临时卡充值统计</span></a></li>-->
+			</ul>
+		</div>
+		<script src="jquery/jquery.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			var pageList =  '$!operatorSession.PageList';
+			if(pageList.indexOf("301") != -1){
+				document.getElementById("301").setAttribute("style","display:''");
+			}else{
+				document.getElementById("301").setAttribute("style","display:none");
+			}if(pageList.indexOf("302") != -1){
+				document.getElementById("302").setAttribute("style","display:''");
+			}else{
+				document.getElementById("302").setAttribute("style","display:none");
+			}if(pageList.indexOf("303") != -1){
+				document.getElementById("303").setAttribute("style","display:''");
+			}else{
+				document.getElementById("303").setAttribute("style","display:none");
+			}if(pageList.indexOf("304") != -1){
+				document.getElementById("304").setAttribute("style","display:''");
+			}else{
+				document.getElementById("304").setAttribute("style","display:none");
+			}if(pageList.indexOf("305") != -1){
+				document.getElementById("305").setAttribute("style","display:''");
+			}else{
+				document.getElementById("305").setAttribute("style","display:none");
+			}if(pageList.indexOf("307") != -1){
+				document.getElementById("307").setAttribute("style","display:''");
+			}else{
+				document.getElementById("307").setAttribute("style","display:none");
+			}if(pageList.indexOf("309") != -1){
+				document.getElementById("309").setAttribute("style","display:''");
+			}else{
+				document.getElementById("309").setAttribute("style","display:none");
+			}if(pageList.indexOf("310") != -1){
+				document.getElementById("310").setAttribute("style","display:''");
+			}else{
+				document.getElementById("310").setAttribute("style","display:none");
+			}if(pageList.indexOf("311") != -1){
+				document.getElementById("311").setAttribute("style","display:''");
+			}else{
+				document.getElementById("311").setAttribute("style","display:none");
+			}if(pageList.indexOf("312") != -1){
+				document.getElementById("312").setAttribute("style","display:''");
+			}else{
+				document.getElementById("312").setAttribute("style","display:none");
+			}
+			
+		</script>
+		<script>
+			$(function(){
+				$(".list-unstyled li a").click(function(){	
+		           $(this).addClass("a_active").parent().siblings().find("a").removeClass("a_active");
+		           $(this).css({"border-left":"4px solid #245cc8","border-right":"4px solid #052e7c"}).parent().siblings().find("a").css({"border-left":"4px solid #21458f","border-right":"4px solid #21458f"});
+				})
+
+				var sidebar_h = $(window).height();
+				$("#sidebar-h").css("height",sidebar_h);
+			})
+		</script>
+	</body>
+</html>

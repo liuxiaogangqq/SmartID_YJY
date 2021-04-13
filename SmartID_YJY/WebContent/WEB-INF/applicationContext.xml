@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+
+	<!-- 定时任务 -->
+	<context:component-scan base-package="com.dhsr.smartid.task" />
+	<task:executor id="executor" pool-size="5" />
+	<task:scheduler id="scheduler" pool-size="10" />
+	<task:annotation-driven executor="executor" scheduler="scheduler" />
+
+
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>WEB-INF/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="exceptionHandler" class="com.dhsr.smartid.util.MyExceptionHandler" />
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<!-- 用来检测连接是否有效的sql，要求是一个查询语句 -->
+		<property name="validationQuery" value="SELECT 'x'" />
+		<!-- 建议配置为true，不影响性能，并且保证安全性 -->
+		<property name="testWhileIdle" value="true" />
+		<!-- 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能 -->
+		<property name="testOnBorrow" value="false" />
+		<!-- 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能 -->
+		<property name="testOnReturn" value="false" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小(Oracle或mysql5.5及以上使用) -->
+		<!-- <property name="poolPreparedStatements" value="true"/> <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/> -->
+
+		<!-- 配置监控统计拦截的filters -->
+		<!-- <property name="filters" value="stat" /> -->
+
+		<!-- 配置关闭长时间不使用的连接 -->
+		<!-- 是否清理removeAbandonedTimeout秒没有使用的活动连接,清理后并没有放回连接池(针对未被close的活动连接) -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 活动连接的最大空闲时间,1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 连接池收回空闲的活动连接时是否打印消息 -->
+		<property name="logAbandoned" value="true" />
+	</bean>
+
+	<!-- define the SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.dhsr.smartid.renshiyewu.domain,com.dhsr.smartid.peizhiguanli.domain,com.dhsr.smartid.zhanghuyewu.domain,com.dhsr.smartid.tingchexitong.domain,com.dhsr.smartid.xiaofeiguanli.domain" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage" value="com.dhsr.smartid.renshiyewu.dao,com.dhsr.smartid.peizhiguanli.dao,com.dhsr.smartid.util.dao,com.dhsr.smartid.zhanghuyewu.dao,com.dhsr.smartid.tingchexitong.dao,com.dhsr.smartid.xiaofeiguanli.dao" />
+	</bean>
+
+	<!-- 第二 
+	<bean id="dataS" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!- 基本属性 url、user、password 
+		<property name="url" value="${oracle.url}" />
+		<property name="username" value="${oracle.username}" />
+		<property name="password" value="${oracle.password}" />
+		<property name="driverClassName" value="${oracle.driverClassName}" />
+
+		<!- 配置初始化大小、最小、最大 
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="0" />
+		<property name="maxIdle" value="10" />
+		<property name="maxActive" value="20" />
+	</bean>
+	-->
+	<!-- define the SqlSessionFactory 
+	<bean id="sqlSessionFactoryS" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataS" />
+		<property name="typeAliasesPackage" value="com.dhsr.smartid.tongbu.domain" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryS" />
+		<property name="basePackage" value="com.dhsr.smartid.tongbu.dao" />
+	</bean>
+	
+	-->
+
+	<bean id="renshiyewuService" class="com.dhsr.smartid.renshiyewu.service.RenshiyewuServiceImpl" />
+
+	<bean id="peizhiguanliService" class="com.dhsr.smartid.peizhiguanli.service.PeizhiguanliServiceImpl" />
+
+	<bean id="utilService" class="com.dhsr.smartid.util.service.UtilServiceImpl" />
+
+	<bean id="zhanghuyewuService" class="com.dhsr.smartid.zhanghuyewu.service.ZhanghuyewuServiceImpl" />
+	
+	<bean id="xiaofeiguanliService" class="com.dhsr.smartid.xiaofeiguanli.service.XiaofeiguanliServiceImpl" />
+	
+	<bean id="tingcheService" class="com.dhsr.smartid.tingchexitong.service.TingcheServiceImpl" />
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- <bean id="transactionM" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataS" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionM" /> -->
+	
+</beans>

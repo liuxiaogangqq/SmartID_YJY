@@ -1,0 +1,29 @@
+@charset "utf-8";
+/* CSS Document */
+html{height:100%}
+body{min-height:100%;background:#f1f4f7 url(../images/index/bg.png) center no-repeat; 
+	background-size:cover;}
+/*头部样式*/
+.navbar .user-wrap{margin: 51px 0 30px;width: 100%;text-align:center;}
+.user-wrap .img-photo{width:64px;height:64px;}
+.user-wrap .f14{font-size: 14px;color: #464646;margin-top: 15px;}
+.user-wrap .r15{margin-right: 15px;}
+.user-wrap .l15{margin-left: 15px;}
+/*头部样式*/
+
+/*一卡通平台样式*/
+.content .platform{width:1240px;height: 477px; position: absolute;top: 50%;margin-top: -239px;left:50%;margin-left:-620px;}
+.content .row{display: -moz-box;display: -webkit-box;display: -ms-flexbox;display: -webkit-flex;display: flex;flex-flow: row nowrap;-webkit-justify-content: center;-mos-justify-content: center;-mz-justify-content: center;justify-content: center;}
+.content .module img{width: 320px;height: 477px;cursor: pointer; transition: All 0.4s ease-in-out;
+    -webkit-transition: All 0.4s ease-in-out;-moz-transition: All 0.4s ease-in-out;
+    -o-transition: All 0.4s ease-in-out;}
+.content .module img:hover{transform: scale(1.2);-webkit-transform: scale(1.2);
+	-moz-transform: scale(1.2);-o-transform: scale(1.2);-ms-transform: scale(1.2);}
+/*一卡通平台样式*/
+
+.footer{position:absolute;bottom: 30px;left: 50%;margin-left: -106px;}
+.footer p {font-size:14px; color:#464646;}
+
+@media only screen and (max-width:750px){
+	.col-sm-6{text-align:center;}
+}

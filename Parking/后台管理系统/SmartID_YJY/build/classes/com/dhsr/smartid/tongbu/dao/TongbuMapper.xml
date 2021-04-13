@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhsr.smartid.tongbu.dao.TongbuMapper">
+	<select id="selectCompany" resultType="LFCompany">
+		select unitname,unitcode,pk_corp,fathercorp,showorder from V_SYS_CORP
+	</select>
+	
+	<select id="selectDepartment" resultType="LFDep">
+		select * from V_SYS_DEPT
+	</select>
+	
+	<select id="selectUserInfo" resultType="LFUser">
+		select * from  V_SYS_PSN
+	</select>
+</mapper>

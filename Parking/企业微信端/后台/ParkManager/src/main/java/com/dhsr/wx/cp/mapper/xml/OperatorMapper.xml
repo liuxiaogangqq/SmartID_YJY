@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhsr.wx.cp.mapper.OperatorMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="OperatorSql">
+        UserInnerId,UserId,UserName,UserTypeInnerId,CompanyInnerId,DepartmentInnerId,AreaList,AppList,UState,Sex,Mobile,Email,ImageUrl,StandbyD
+    </sql>
+    <!-- 账户sql-->
+    <sql id="AccountSql">AccountInnerId,AccountTypeInnerId,UserInnerId,Money,AccountState,Remark,StandbyA,StandbyB</sql>
+
+    <!-- 查询操作员参数-->
+    <select id="selectOperatorByMap" parameterType="map" resultType="Operator">
+        select  <include refid="OperatorSql"></include>,UserTypeName,CompanyName,DepartmentName from View_UserAll where
+        DelFlag = 0
+        <if test="UserId!=null and UserId!=''">
+            and UserId = #{UserId}
+        </if>
+        <if test="UserName!=null and UserName!=''">
+            and UserName = #{UserName}
+        </if>
+        <if test="UserInnerId!=null and UserInnerId!=''">
+            and UserInnerId = #{UserInnerId}
+        </if>
+        <if test="DepartmentInnerId!=null and DepartmentInnerId!=''">
+            and DepartmentInnerId = #{DepartmentInnerId}
+        </if>
+        <if test="CompanyInnerId!=null and CompanyInnerId!=''">
+            and CompanyInnerId = #{CompanyInnerId} and DepartmentInnerId is null
+        </if>
+       <if test="UserTypeInnerId!=null and UserTypeInnerId!=''">
+            and UserTypeInnerId = #{UserTypeInnerId}
+        </if>
+        <if test="Mobile!=null and Mobile!=''">
+            and Mobile = #{Mobile}
+        </if>
+    </select>
+   <!-- 修改操作员认证-->
+    <update id="updateOperator" parameterType="map">
+        update System_UserInfo set StandbyD = #{StandbyD} where UserInnerId = #{UserInnerId}
+    </update>
+
+    <!-- 查询账户 -->
+    <select id="selectAccount" parameterType="Map" resultType="Account">
+        SELECT
+        <include refid="AccountSql"/>
+        FROM System_Account
+        where AccountState=0
+        <if test="AccountInnerId !=null">
+            and AccountInnerId = #{AccountInnerId}
+        </if>
+        <if test="UserInnerId!=null and UserInnerId!=''">
+            and UserInnerId=#{UserInnerId}
+        </if>
+        <if test="DepartmentInnerId !=null">
+            and UserInnerId = (select UserInnerId from System_UserInfo where DepartmentInnerId = #{DepartmentInnerId}
+            and UserTypeInnerId = -1)
+        </if>
+        <if test="AccountTypeInnerId !=null">
+            and AccountTypeInnerId = #{AccountTypeInnerId}
+        </if>
+    </select>
+    <!-- 查询账户 -->
+    <select id="selectAccountByUser" parameterType="Map" resultType="Account">
+        SELECT
+        <include refid="AccountSql"/>
+        FROM System_Account
+        where AccountState=0
+        <if test="AccountInnerId !=null">
+            and AccountInnerId = #{AccountInnerId}
+        </if>
+        <if test="UserInnerId!=null and UserInnerId!=''">
+            and UserInnerId=#{UserInnerId}
+        </if>
+        <if test="AccountTypeInnerId !=null">
+            and AccountTypeInnerId = #{AccountTypeInnerId}
+        </if>
+    </select>
+
+    <!-- 账户充减值-->
+    <update id="updateAccount" parameterType="Map">
+        update System_Account set
+        Money = #{Money}
+        where AccountInnerId = #{AccountInnerId}
+    </update>
+
+    <!-- 查询人员信息 -->
+   <select id="selectOperatorInfo" parameterType="Map" resultType="Operator">
+       select  <include refid="OperatorSql"></include> from System_UserInfo where  DelFlag = 0  and UState = 3
+   </select>
+
+</mapper>

@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|人事业务中心</title>
+#parse("/common/header-meta-link.vm")
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="rsywright.html">人事业务中心</a>
+    /<span>公司管理</span>
+  </p>
+  <div class="row"><div class="col-sm-12 border1 text-right">
+      <button type="button" class="btn btn-link" id="select">查询</button>
+	  <!--<button type="button" class="btn btn-link" id="insert">添加</button>
+      <button type="button" class="btn btn-link">导出</button>-->
+	  <button type="button" class="btn btn-link" id="update">授权</button>
+	  <button type="button" class="btn btn-link" id="delete">删除</button>
+    </div></div>
+  <div class="row" style="margin-top:20px;">
+    <div class="col-sm-3">
+      <label>公司编号：</label>
+      <input type="text" class="form-control" id="sCompanyId" name="CompanyId" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" />
+    </div>
+    <div class="col-sm-3">
+      <label>公司名称：</label>
+      <input type="text" class="form-control" id="sCompanyName"  name="CompanyName" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" />  
+    </div>
+    <div class="col-sm-3">
+      <label>所属区域：</label>
+      <input type="text" class="form-control" id="sAreaInnerId" name="AreaInnerId" style="width:170px;height:28px">
+    </div>
+    <div class="col-sm-3" id="sStandbyADiv">
+      <label id="sStandbyALabel">备用1：</label>
+      <input type="text" class="form-control" id="sStandbyA" name="StandbyA" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+	<div class="col-sm-3" id="sStandbyBDiv">
+      <label id="sStandbyBLabel">备用2：</label>
+      <input type="text" class="form-control" id="sStandbyB" name="StandbyB" onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+  </div>
+  <hr class="w98">
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table" class="easyui-datagrid"  style="height:450px">
+	</table>
+  </div>
+</div>
+
+<!--添加弹出框-->
+<div class="modal fade" id="insertDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">添加公司</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="insertForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*公司名称：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iCompanyName" name="CompanyName"  >
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*公司编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iCompanyId" name="CompanyId">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*所属区域：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iAreaInnerId" name="AreaInnerId" style="width:250px;height:30px">
+						</div>
+					</div>
+    				<div class="form-group" id="iStandbyADiv">
+						<label class="col-sm-3 control-label" id="iStandbyALabel">备用1：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iStandbyA" name="StandbyA">
+						</div>
+					</div>
+					<div class="form-group" id="iStandbyBDiv">
+						<label class="col-sm-3 control-label" id="iStandbyBLabel">备用2：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iStandbyB" name="StandbyB">
+						</div>
+				    </div>
+					<div class="form-group" id="iRemarkDiv">
+						<label class="col-sm-3 control-label" id="iRemarkLabel">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="iRemark" name="Remark">
+						</div>
+				    </div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="insertSubmit">保存</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+	
+<!--修改弹出框-->
+<div class="modal fade" id="updateDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">修改公司</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="updateForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*公司名称：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uCompanyName" name="CompanyName" readonly>
+							<input type="hidden" class="form-control inp" id="uCompanyInnerId" name="CompanyInnerId">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*公司编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uCompanyId" name="CompanyId" readonly>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">*所属区域：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uAreaInnerId" name="AreaInnerId" style="width:250px;height:30px" readonly>
+						</div>
+					</div>
+    				<div class="form-group" id="uStandbyADiv">
+						<label class="col-sm-3 control-label" id="uStandbyALabel">备用1：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uStandbyA" name="StandbyA" readonly>
+						</div>
+					</div>
+					<div class="form-group" id="uStandbyBDiv">
+						<label class="col-sm-3 control-label" id="uStandbyBLabel">备用2：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uStandbyB" name="StandbyB" readonly>
+						</div>
+				    </div>
+					<div class="form-group" id="uRemarkDiv">
+						<label class="col-sm-3 control-label" id="uRemarkLabel">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uRemark" name="Remark" readonly>
+						</div>
+				    </div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label" >权限标识：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="depConPower" name="depConPower" style="height:28px;">
+						</div>
+				    </div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="updateSubmit">保存</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<script src="js/rsywzx/company.js"></script>
+</body>
+</html>

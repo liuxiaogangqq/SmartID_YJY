@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {font-family:'微软雅黑'; font-size:14px; color:#666; overflow-x:hidden;}
+.container-fluid {background-color:#fefefe; padding:0;}
+p.nav-bread {background-color:#f1f2f7; width:100%; height:47px; line-height:47px; border-top:1px solid #c8c7cc; border-bottom:1px solid #c8c7cc; padding-left:20px;}
+p.nav-bread a {text-decoration:underline;}
+p.nav-bread span {color:#bababb;}
+
+/*考勤管理系统--考勤规则*/
+.btn_wrap {margin-top:60px; text-align:center;}
+.btn_wrap .btn {margin-left:30px;}
+
+.set {width:90%; margin:0 auto;}
+.set .form-control {width:220px; display:inline-block;}
+
+.set .table tr td {border:0;}
+.set select.form-control {width:75%;}
+
+.kqgl {border:1px solid #ededed; width:150px; height:180px;}
+.ul-days li {list-style:none; width:90px;}
+.ul-days.list-inline {margin-left:15px;}
+.tree-warp {margin-left:20px; float:left;}
+
+/*考勤管理系统--节假日*/
+.holiday {width:95%; margin:0 auto;} 
+.holiday .form-control.holiday-name {width:240px;}
+.holiday .form-control {width:120px; display:inline-block;}
+
+/*考勤管理系统--请假&批阅*/
+.qingjia {width:95%; margin:0 auto;} 
+.qingjia .form-control.w240 {width:240px;}
+.qingjia .form-control {width:120px; display:inline-block;}

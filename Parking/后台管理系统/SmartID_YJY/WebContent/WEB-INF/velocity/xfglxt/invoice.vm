@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|消费管理系统</title>
+ #parse("/common/header-meta-link.vm")
+ <style type="text/css">
+ .row label{width:70px;}
+ </style>
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+ <div id="readobject" style="display: none" >
+ <OBJECT
+	  classid="clsid:CEA82072-043E-4023-BF5E-4AAE4AF1454B" 
+	  width=100
+	  height=100
+	  align=center
+	  hspace=0
+	  vspace=0
+	  id = SmartID_zr	  
+>
+  </OBJECT>
+ </div>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="xfglright.html">消费管理系统</a>
+    /<span>开发票</span>
+  </p>
+  <div class="row"><div class="col-sm-12 border1 text-right">
+	  <button type="button" class="btn btn-link" id="readCard">读卡</button>
+      <button type="button" class="btn btn-link" id="select">查询</button>
+	  <button type="button" class="btn btn-link" id="kaipiao">开票</button>
+    </div></div>
+  <div class="row" style="margin-top:20px;">
+    <div class="col-sm-3">
+      <label>人员编号：</label>
+      <input type="text" class="form-control" id="sUserId" name="UserId"  onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3">
+      <label>人员姓名：</label>
+      <input type="text" class="form-control" id="sUserName" name="UserName"  onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+	<!--<div class="col-sm-3">
+      <label>公司部门：</label>
+      <input type="text" class="form-control" id="sDepartmentInnerId" name="DepartmentInnerId" style="width:170px;height:28px">
+    </div>-->
+	<div class="col-sm-3">
+      <label>开始时间：</label>
+      <input type="text" class="form-control" id="sStartTime" name="StartTime">
+    </div>
+	<div class="col-sm-3">
+      <label>结束时间：</label>
+      <input type="text" class="form-control" id="sEndTime" name="EndTime">
+    </div>
+	<div class="col-sm-3">
+      <label>消费类型：</label>
+      <input type="text" class="form-control" id="sConTypeList" name="ConTypeList" style="width:170px;height:28px">
+    </div>
+	<div class="col-sm-3">
+      <label>商户设备：</label>
+      <input type="text" class="form-control" id="sTerminalTypeInnerId" name="TerminalTypeInnerId" style="width:170px;height:28px">
+    </div>
+    <div class="col-sm-3">
+      <label>开票标识：</label>
+      <select  multiple="multiple" id="invoiceFlag" name="StandbyD" style="height:28px; width:170px; ">
+			<option value="0">未开票</option>
+			<option value="1">已开票</option>
+	  </select>
+    </div>
+  </div>
+  <hr class="w98">
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table"   style="height:450px">
+	</table>
+  </div>
+</div>
+</div>
+
+<!--充值弹出框-->
+<div class="modal fade" id="errorConLogDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">误消费补款</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="errorConLogForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">人员姓名：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eUserName" name="UserName" readonly="readonly"\>
+							<input type="hidden" class="form-control inp" id="eConLogInnerId" name="ConLogInnerId"\>
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">人员编号：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eUserId" name="UserId" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">公司：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eCompanyName" name="CompanyName" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">部门：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eDepartmentName" name="DepartmentName" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">消费设备：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eConTerminalName" name="ConTerminalName" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">现金消费：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="ePersonMoney" name="PersonMoney" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">补贴消费：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eAllowanceMoney" name="AllowanceMoney" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">总消费：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eMoney" name="Money"  readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">补回金额：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eErrorMoney" name="ErrorMoney">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="eRemark" name="Remark"  onblur="value=value.replace(/[^\w\u4E00-\u9FA5]/g, '')" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="button" class="btn btn-primary" id="errorConLogSubmit">补款</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<div class="modal fade" id="myXiazai">
+    <div class="modal-dialog">
+        <div class="modal-content"> 
+            <div class="modal-header">
+    			<button type="button" class="close" data-dismiss="modal"> 
+    				<span aria-hidden="true">&times;</span>
+    				<span class="sr-only">Close</span>
+    			</button>
+    			<h4 class="modal-title">导出成功</h4>
+			</div>
+            <div class="modal-body">
+                <div id="xiazai">
+    			</div>
+            </div>
+		</div>
+    </div>
+</div>
+
+<script src="js/xfglxt/invoice.js"></script>
+</body>
+</html>

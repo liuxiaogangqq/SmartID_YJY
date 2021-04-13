@@ -1,0 +1,12 @@
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.easyui.min.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/easyui-lang-zh_CN.js"></script>
+<script src="js/easyui_validate_extents.js"></script>
+<script src="js/validateNew.js"></script>
+<script src="js/jquery.ztree.all-3.5.min.js"></script>
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->

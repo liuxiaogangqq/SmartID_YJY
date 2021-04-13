@@ -1,0 +1,24 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {font-family:'微软雅黑'; font-size:14px; color:#666; }
+a,img {border:none; margin:0; padding:0;}
+.container-fluid {background-color:#fefefe; padding:0;}
+p.nav-bread {background-color:#f1f2f7; width:100%; height:47px; line-height:47px; border-top:1px solid #c8c7cc; border-bottom:1px solid #c8c7cc; padding-left:20px;}
+p.nav-bread a {text-decoration:underline;}
+p.nav-bread span {color:#bababb;}
+div.content {margin-left:20px;}
+/*访客管理系统----访客查询*/
+#tab-dengji form,#tab-yuyue form {width:98%; margin:0 auto;}
+#tab-dengji form b,#tab-yuyue form b {display:inline-block; width:90px;}
+#tab-dengji .form-control,#tab-yuyue .form-control {width:180px; display:inline-block;}
+.chaxun-tab {width: 98%; margin: 0 auto;}
+.chaxun-tab thead tr th {text-align: center;}
+.combo {border-color: #ccc;}
+/*访客管理系统----访客统计*/
+.fktj {width:96%; margin:0 auto;}
+.fktj .form-control {width:180px; display:inline-block;}
+.fktj .spacing {margin-left: 10px; margin-right: 10px;}
+.tongji-tab {width: 98%; margin: 0 auto;}
+.tongji-tab thead tr th {text-align: center;}
+.combo {border-color: #ccc;}

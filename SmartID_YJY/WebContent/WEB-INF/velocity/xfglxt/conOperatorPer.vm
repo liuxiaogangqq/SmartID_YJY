@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>智能一卡通平台|消费管理系统</title>
+ #parse("/common/header-meta-link.vm")
+ <script type="text/javascript">
+if('$!operatorSession.TableSize'){
+var TableSize = '$!operatorSession.TableSize';
+}else{
+ top.location='login.html';
+}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+  <p class="nav-bread navbar-fixed-top">
+    <a onClick="goIndex()" style="cursor:pointer;">首页</a>
+    /
+    <a href="xfglright.html">消费管理系统</a>
+    /<span>操作员权限管理</span>
+  </p>
+  <div class="row top54">
+	<div class="col-sm-3">
+      <label>登录名：</label>
+      <input type="text" class="form-control" id="sOperatorId" name="OperatorId"  onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+    <div class="col-sm-3">
+      <label>姓名：</label>
+      <input type="text" class="form-control" id="sOperatorName" name="OperatorName"  onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" > 
+    </div>
+    <div class="col-sm-3" id="sRemarkDiv">
+      <label id="sRemarkLabel">备注：</label>
+      <input type="text" class="form-control" id="sRemark" name="Remark"  onblur="value=value.replace(/[^\.\w\u4E00-\u9FA5]/g, '')" >
+    </div>
+  </div>
+  <div class="row" style="margin-top:5px;"><div class="col-sm-12 text-right">
+      <button type="button" class="btn btn-primary" id="select">查询</button>
+	  <button type="button" class="btn btn-primary" id="update">修改</button>
+    </div></div>
+  <div class="container-fluid" style="margin-top:5px;padding:0 15px 15px;">
+	<table id="table" class="easyui-datagrid"  style="height:450px">
+	</table>
+  </div>
+</div>
+	
+<!--修改弹出框-->
+<div class="modal fade" id="updateDiv"><!--弹出框-->
+	<div class="modal-dialog"><!--弹出的对话框-->
+		<div class="modal-content"><!--弹出对话框的内容-->
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"> 
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">修改权限</h4>
+			</div>
+  			<div class="modal-body">
+    			<form class="form-horizontal" role="form" id="updateForm">
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*登录名：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uOperatorId" name="OperatorId" readonly="readonly">
+							<input type="hidden" class="form-control inp" id="uOperatorInnerId" name="OperatorInnerId">
+						</div>
+					</div>
+    				<div class="form-group">
+						<label class="col-sm-3 control-label">*姓名：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uOperatorName" name="OperatorName" readonly="readonly">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">商户权限：</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control inp" id="uMerchantInnerId" name="MerchantInnerId"style="width:250px;height:30px">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label"></label>
+						<div class="col-sm-8">
+							<button type="submit" class="btn btn-primary" id="updateSubmit">修改</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</form>
+  			</div>
+		</div>
+	</div>
+</div>
+<!--弹出框结束-->
+
+<script src="js/xfglxt/conOperatorPer.js"></script>
+</body>
+</html>
